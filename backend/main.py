@@ -1,7 +1,5 @@
 # Author: Dhaval Patel. Codebasics YouTube Channel
-
-from fastapi import FastAPI
-from fastapi import Request
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 import db_helper
 import generic_helper
@@ -11,7 +9,13 @@ app = FastAPI()
 inprogress_orders = {}
 
 @app.post("/")
-async def handle_request(request: Request):
+async def handle_post_request(request: Request):
+#     return {"message": "hello"}
+
+# @app.get("/")
+# async def handle_get_request():
+#     return {"message": "This endpoint only accepts POST requests. Please send a POST request."}
+
     # Retrieve the JSON data from the request
     payload = await request.json()
 
@@ -23,10 +27,10 @@ async def handle_request(request: Request):
     session_id = generic_helper.extract_session_id(output_contexts[0]["name"])
 
     intent_handler_dict = {
-        'order.add - context: ongoing-order': add_to_order,
-        'order.remove - context: ongoing-order': remove_from_order,
-        'order.complete - context: ongoing-order': complete_order,
-        'track.order - context: ongoing-tracking': track_order
+        'order.add -context:ongoing-order': add_to_order,
+        'order.remove -context:ongoing-order': remove_from_order,
+        'order complete - context:ongoing order': complete_order,
+        'track.order context:ongoing-order': track_order
     }
 
     return intent_handler_dict[intent](parameters, session_id)
@@ -144,3 +148,13 @@ def track_order(parameters: dict, session_id: str):
     return JSONResponse(content={
         "fulfillmentText": fulfillment_text
     })
+
+
+
+
+
+#typed code to check backend tarck id request
+    # if intent == "track.order context:ongoing-order":
+    #      return JSONResponse(content={
+    #         "fulfillmentText": f"recieved {intent}== in the backend"
+    #     })
