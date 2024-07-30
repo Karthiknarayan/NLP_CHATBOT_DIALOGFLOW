@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 import db_helper
 import generic_helper
-
+from billGen import generate_bill_pdf
 app = FastAPI()
 
 inprogress_orders = {}
@@ -68,8 +68,11 @@ def complete_order(parameters: dict, session_id: str):
 
             fulfillment_text = f"Awesome. We have placed your order. " \
                            f"Here is your order id # {order_id}. " \
-                           f"Your order total is {order_total} which you can pay at the time of delivery!"
-
+                           f"Your order total is {order_total} which you can pay at the time of delivery!"\
+                           f"Your bill has been generated!!!"\
+                            f"  Bill name : order_{order_id}_bill.pdf"
+            generate_bill_pdf(order_id, f"order_{order_id}_bill.pdf")
+            
         del inprogress_orders[session_id]
 
     return JSONResponse(content={
@@ -138,23 +141,17 @@ def remove_from_order(parameters: dict, session_id: str):
 
 
 def track_order(parameters: dict, session_id: str):
-    order_id = int(parameters['order_id'])
-    order_status = db_helper.get_order_status(order_id)
-    if order_status:
-        fulfillment_text = f"The order status for order id: {order_id} is: {order_status}"
-    else:
-        fulfillment_text = f"No order found with order id: {order_id}"
+    try:
+        order_id = int(parameters['number'][0])  # Assuming 'number' is a list
+        order_status = db_helper.get_order_status(order_id)
+        if order_status:
+            fulfillment_text = f"The order status for order id: {order_id} is: {order_status}"
+        else:
+            fulfillment_text = f"No order found with order id: {order_id}"
+    except Exception as e:
+        fulfillment_text = f"An error occurred while tracking the order: {str(e)}"
 
     return JSONResponse(content={
         "fulfillmentText": fulfillment_text
     })
 
-
-
-
-
-#typed code to check backend tarck id request
-    # if intent == "track.order context:ongoing-order":
-    #      return JSONResponse(content={
-    #         "fulfillmentText": f"recieved {intent}== in the backend"
-    #     })
