@@ -150,7 +150,7 @@ def track_order(parameters: dict, session_id: str):
             fulfillment_text = f"No order found with order id: {order_id}"
     except Exception as e:
         fulfillment_text = f"An error occurred while tracking the order: {str(e)}"
-
+    db_helper.update_order_status(order_id)
     return JSONResponse(content={
         "fulfillmentText": fulfillment_text
     })

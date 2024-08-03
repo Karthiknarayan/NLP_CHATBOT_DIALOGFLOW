@@ -43,7 +43,7 @@ def generate_bill_pdf(order_id, file_name="bill.pdf"):
     
     # Draw the header with company name
     c.setFont("Helvetica-Bold", 16)
-    c.drawString(30, height - 30, "FOODY HELPER")
+    c.drawString(30, height - 30, "HOTEL_FOODIE_FRIEND")
     
     # Draw the order ID
     c.setFont("Helvetica", 12)
