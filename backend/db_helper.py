@@ -1,13 +1,14 @@
-import mysql.connector
-from mysql.connector import errorcode
-
+import psycopg2
+from psycopg2 import sql, Error
+from configs.settings import MainSettings
+settings = MainSettings()
 global cnx
 
-cnx = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Karthik@2003",
-    database="pandeyji_eatery"
+cnx = psycopg2.connect(
+host= settings.host,
+user= settings.user,
+password= settings.password,
+dbname= settings.dbname
 )
 
 def insert_order_item(food_item, quantity, order_id):
@@ -17,7 +18,7 @@ def insert_order_item(food_item, quantity, order_id):
             cnx.commit()
         print("Order item inserted successfully!")
         return 1
-    except mysql.connector.Error as err:
+    except psycopg2.Error as err:
         print(f"Error inserting order item: {err}")
         cnx.rollback()
         return -1
@@ -32,7 +33,7 @@ def insert_order_tracking(order_id, status):
             insert_query = "INSERT INTO order_tracking (order_id, status) VALUES (%s, %s)"
             cursor.execute(insert_query, (order_id, status))
             cnx.commit()
-    except mysql.connector.Error as err:
+    except psycopg2.Error as err:
         print(f"Error inserting order tracking: {err}")
         cnx.rollback()
     except Exception as e:
@@ -46,7 +47,7 @@ def get_total_order_price(order_id):
             cursor.execute(query, (order_id,))
             result = cursor.fetchone()[0]
         return result
-    except mysql.connector.Error as err:
+    except psycopg2.Error as err:
         print(f"Error fetching total order price: {err}")
         return None
     except Exception as e:
@@ -60,7 +61,7 @@ def get_next_order_id():
             cursor.execute(query)
             result = cursor.fetchone()[0]
         return 1 if result is None else result + 1
-    except mysql.connector.Error as err:
+    except psycopg2.Error as err:
         print(f"Error fetching next order ID: {err}")
         return None
     except Exception as e:
@@ -74,7 +75,7 @@ def get_order_status(order_id):
             cursor.execute(query, (order_id,))
             result = cursor.fetchone()
         return result[0] if result else None
-    except mysql.connector.Error as err:
+    except psycopg2.Error as err:
         print(f"Error fetching order status: {err}")
         return None
     except Exception as e:
@@ -104,7 +105,7 @@ def update_order_status(order_id):
         else:
             print(f"No update required for status '{current_status}'")
             return 0
-    except mysql.connector.Error as err:
+    except psycopg2.Error as err:
         print(f"Error updating order status: {err}")
         cnx.rollback()
         return -1

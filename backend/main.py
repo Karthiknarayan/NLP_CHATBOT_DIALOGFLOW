@@ -1,9 +1,9 @@
 # Author: Dhaval Patel. Codebasics YouTube Channel
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-import db_helper
-import generic_helper
-from billGen import generate_bill_pdf
+import backend.db_helper
+import backend.generic_helper
+from backend.billGen import generate_bill_pdf
 app = FastAPI()
 
 inprogress_orders = {}
