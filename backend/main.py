@@ -1,8 +1,8 @@
 # Author: Dhaval Patel. Codebasics YouTube Channel
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-import backend.db_helper
-import backend.generic_helper
+import backend.db_helper as db_helper
+import backend.generic_helper as generic_helper
 from backend.billGen import generate_bill_pdf
 app = FastAPI()
 
