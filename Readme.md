@@ -128,9 +128,7 @@ PDF bills are generated automatically in the directory specified by `BILL_STORAG
 
 ## License
 
-MIT License
+Contact me Via linkedin for productional use and help of the codebase.
 
 ---
 
-**Credits:**  
-- Dhaval Patel, Codebasics YouTube Channel (for original code structure and ideas)
