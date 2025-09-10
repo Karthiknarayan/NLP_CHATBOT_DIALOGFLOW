@@ -5,6 +5,7 @@ from decimal import Decimal
 import psycopg2
 from psycopg2 import sql, Error
 from configs.settings import MainSettings
+import os
 settings = MainSettings()
 def get_order_details(order_id):
     # Connect to the database
@@ -46,6 +47,11 @@ def get_order_details(order_id):
         return None
 
 def generate_bill_pdf(order_id, file_name="bill.pdf"):
+    # Ensure bills directory exists
+    bills_dir = settings.bill_storage_path
+    os.makedirs(bills_dir, exist_ok=True)
+    file_path = os.path.join(bills_dir, file_name)
+
     # Fetch order details from the database
     order_details = get_order_details(order_id)
     
@@ -53,7 +59,7 @@ def generate_bill_pdf(order_id, file_name="bill.pdf"):
         print(f"No order found with ID {order_id}")
         return
     
-    c = canvas.Canvas(file_name, pagesize=letter)
+    c = canvas.Canvas(file_path, pagesize=letter)
     width, height = letter
     
     # Draw the header with company name
@@ -80,18 +86,15 @@ def generate_bill_pdf(order_id, file_name="bill.pdf"):
         c.drawString(300, y, f"${item['total_price']:.2f}")
         sum += item['total_price']
         y -= 20
-    # c.setFont("Helvetica-Bold", 10)
-
 
     # Draw the grand total
     c.setFont("Helvetica-Bold", 10)
     c.drawString(30, y - 20, "GRAND TOTAL")
-
     c.drawString(300, y - 20, f"${sum:.2f}")
     
     # Save the PDF
     c.save()
-    print(f"Bill generated successfully: {file_name}")
+    print(f"Bill generated successfully: {file_path}")
 
 # Example usage
 # generate_bill_pdf(59)
