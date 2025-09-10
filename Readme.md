@@ -53,7 +53,7 @@
   ├── .gitignore
   └── README.md
 
-setup_instructions:
+# setup_instructions:
   - step: "Clone the Repository"
     commands:
       - git clone <repo-url>
@@ -102,4 +102,4 @@ bill_generation:
   description: "PDF bills are generated automatically in the directory specified by BILL_STORAGE_PATH in .env."
   example_output: "bill/order_<id>_bill.pdf"
 
-license: "MIT License"
+# license: "MIT License"
