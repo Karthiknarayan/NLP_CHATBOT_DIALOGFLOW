@@ -27,6 +27,7 @@ async def handle_post_request(request: Request):
     session_id = generic_helper.extract_session_id(output_contexts[0]["name"])
 
     intent_handler_dict = {
+        'New.order': add_to_order,
         'order.add -context:ongoing-order': add_to_order,
         'order.remove -context:ongoing-order': remove_from_order,
         'order complete - context:ongoing order': complete_order,
@@ -41,9 +42,9 @@ def save_to_db(order: dict):
     # Insert individual items along with quantity in orders table
     for food_item, quantity in order.items():
         rcode = db_helper.insert_order_item(
-            food_item,
-            quantity,
-            next_order_id
+            str(food_item),        # Ensure string
+            int(quantity),         # Ensure integer
+            int(next_order_id)     # Ensure integer
         )
 
         if rcode == -1:

@@ -11,11 +11,28 @@ password= settings.password,
 dbname= settings.dbname
 )
 
-def insert_order_item(food_item, quantity, order_id):
+def insert_order_item(food_item_name, quantity, order_id):
     try:
         with cnx.cursor() as cursor:
-            cursor.callproc('insert_order_item', (food_item, quantity, order_id))
+            # Step 1: Get item_id and price
+            cursor.execute("SELECT item_id, price FROM food_items WHERE name = %s", (food_item_name,))
+            row = cursor.fetchone()
+            
+            if not row:
+                print(f"Food item '{food_item_name}' not found in food_items table.")
+                return -1
+            
+            item_id, price = row
+            total_price = price * quantity
+
+            # Step 2: Insert directly into orders table
+            insert_query = """
+                INSERT INTO orders (order_id, item_id, quantity, total_price)
+                VALUES (%s, %s, %s, %s)
+            """
+            cursor.execute(insert_query, (order_id, item_id, quantity, total_price))
             cnx.commit()
+
         print("Order item inserted successfully!")
         return 1
     except psycopg2.Error as err:

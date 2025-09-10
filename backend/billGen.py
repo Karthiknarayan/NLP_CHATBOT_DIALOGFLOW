@@ -2,17 +2,20 @@ import mysql.connector
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from decimal import Decimal
-
+import psycopg2
+from psycopg2 import sql, Error
+from configs.settings import MainSettings
+settings = MainSettings()
 def get_order_details(order_id):
     # Connect to the database
-    conn = mysql.connector.connect(
-        host="localhost",       # Your database host
-        user="root",            # Your database username
-        password="Karthik@2003",  # Your database password
-        database="pandeyji_eatery"  # Your database name
+    cnx = psycopg2.connect(
+        host=settings.host,
+        user=settings.user,
+        password=settings.password,
+        dbname=settings.dbname
     )
-    cursor = conn.cursor(dictionary=True)
-    
+    cursor = cnx.cursor()  # <-- Create the cursor
+
     # Fetch order details from the orders and food_items tables
     query = """
     SELECT o.order_id, f.name AS item_name, o.quantity, o.total_price
@@ -21,10 +24,22 @@ def get_order_details(order_id):
     WHERE o.order_id = %s
     """
     cursor.execute(query, (order_id,))
-    items = cursor.fetchall()
-    
-    conn.close()
-    
+    rows = cursor.fetchall()
+
+    cursor.close()
+    cnx.close()
+
+    # Convert rows to list of dicts for easier access in PDF generation
+    items = [
+        {
+            "order_id": row[0],
+            "item_name": row[1],
+            "quantity": row[2],
+            "total_price": row[3]
+        }
+        for row in rows
+    ]
+
     if items:
         return {"order_id": order_id, "items": items}
     else:
