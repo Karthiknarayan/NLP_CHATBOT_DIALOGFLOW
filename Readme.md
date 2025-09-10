@@ -13,45 +13,45 @@
   - PDF Bill Generation: "Automatically generates a PDF bill for each completed order."
   - Frontend: "Simple HTML/CSS interface with an embedded Dialogflow chatbot."
 
-# project_structure: |
-  NLP_CHATBOT_DIALOGFLOW/
-  │
-  ├── backend/                 # FastAPI backend and helpers
-  │   ├── billGen.py
-  │   ├── db_helper.py
-  │   ├── generic_helper.py
-  │   ├── main.py
-  │   ├── pandeyji_eatery.sql
-  │   ├── requirements.txt
-  │   └── extra/extra.py
-  │
-  ├── bill/                    # Generated PDF bills
-  │   └── order_x_bill.pdf
-  │
-  ├── configs/                 # Configurations
-  │   └── settings.py
-  │
-  ├── db/                      # Database scripts
-  │   ├── pandeyji_eatery_pg.sql
-  │   └── pandeyji_eatery.sql
-  │
-  ├── dialogflow_assets/       # Dialogflow training data
-  │   └── training_phrases.txt
-  │
-  ├── frontend/                # Frontend files
-  │   ├── banner.jpg
-  │   ├── home.html
-  │   ├── menu1.jpg
-  │   ├── menu2.jpg
-  │   ├── menu3.jpg
-  │   └── styles.css
-  │
-  ├── ngrok/                   # Ngrok for exposing localhost
-  │   
-  │
-  ├── .env                     # Environment variables (DB config, bill path, etc.)
-  ├── .gitignore
-  └── README.md
+## project_structure
+```plaintext
+NLP_CHATBOT_DIALOGFLOW/
+│
+├── backend/                 # FastAPI backend and helpers
+│   ├── billGen.py
+│   ├── db_helper.py
+│   ├── generic_helper.py
+│   ├── main.py
+│   ├── pandeyji_eatery.sql
+│   ├── requirements.txt
+│   └── extra/extra.py
+│
+├── bill/                    # Generated PDF bills
+│   └── order_x_bill.pdf
+│
+├── configs/                 # Configurations
+│   └── settings.py
+│
+├── db/                      # Database scripts
+│   ├── pandeyji_eatery_pg.sql
+│   └── pandeyji_eatery.sql
+│
+├── dialogflow_assets/       # Dialogflow training data
+│   └── training_phrases.txt
+│
+├── frontend/                # Frontend files
+│   ├── banner.jpg
+│   ├── home.html
+│   ├── menu1.jpg
+│   ├── menu2.jpg
+│   ├── menu3.jpg
+│   └── styles.css
+│
+├── ngrok/                   # Ngrok for exposing localhost
+│
+├── .env                     # Environment variables (DB config, bill path, etc.)
+├── .gitignore
+└── README.md
 
 # setup_instructions:
   - step: "Clone the Repository"
